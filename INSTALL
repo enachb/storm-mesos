@@ -1,0 +1,13 @@
+
+1) Setup up leiningen (see Installation section on https://github.com/technomancy/leiningen)
+
+2) Copy protobobuf-2.4.1.jar and mesos-0.1x.0.jar to lib/
+
+3) Download storm-0.8.2.zip to lib/
+
+4) $ lein jar
+
+5) $ mvn clean compile install
+
+6) Run bin/build-release.sh ../lib/storm-0.8.2.zip
+
