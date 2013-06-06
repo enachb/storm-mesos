@@ -183,7 +183,7 @@ public class MesosNimbus implements INimbus {
             if(failoverTimeout==null) failoverTimeout = 3600;
             
             FrameworkInfo.Builder finfo = FrameworkInfo.newBuilder()
-                                    .setName("Storm-0.8.0")
+                                    .setName("Storm-0.8.2")
                                     .setFailoverTimeout(failoverTimeout.doubleValue())
                                     .setUser("");
             if(id!=null) {
