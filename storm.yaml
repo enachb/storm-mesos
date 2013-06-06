@@ -1,13 +1,23 @@
-java.library.path: "native:/Users/nathan/devtools/mesos-0.9.0/build/src/.libs"
-mesos.master.url: "local"
-mesos.executor.uri: "/globally/available/location/of/distribution/storm-mesos-0.0.1-SNAPSHOT.tgz"
+# Default configuration for standalone mode (every daemons on one node with default settings)
+
+# Path to mesos distribution built properly
+java.library.path: "native:/home/hadoop/mesos-0.11.0/build/src/.libs"
+
+# hostname:port of the mesos master node
+mesos.master.url: "localhost:5050"
+
+# in cluster ENV, change it to a globally accessible directory (HDFS or NFS etc.)
+mesos.executor.uri: "/usr/local/storm-mesos-0.8.2-SNAPSHOT.tgz"
+
+# hostname:port of zookeeper nodes (default port 2181)
 storm.zookeeper.servers:
     - "localhost"
+  # - "zk1.domain"
+  # - "zk2.domain"
+  # - "zk3.domain"
+
+# hostname of nimbus node
 nimbus.host: "localhost"
 
-storm.local.dir: "storm-local"
-
-#mesos.allowed.hosts:
-#  - host1
-#mesos.disallowed.hosts:
-#  - host1
+# full path of storm local working directory
+storm.local.dir: "/usr/local/storm-local"
