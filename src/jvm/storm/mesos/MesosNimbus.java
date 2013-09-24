@@ -166,7 +166,16 @@ public class MesosNimbus implements INimbus {
         if(l == null) { return null; }
         else return new HashSet(l);
     }
-    
+
+    private String getStormCmdOptions(){
+        String stormOptions = System.getProperty("storm.options");
+        if(stormOptions != null){
+            return "-c " + stormOptions;
+        } else {
+            return "";
+        }
+    }
+
     @Override
     public void prepare(Map conf, String localDir) {
         try {
@@ -365,27 +374,27 @@ public class MesosNimbus implements INimbus {
                                 .setValue(MesosCommon.taskId(slot.getNodeId(), slot.getPort())))
                             .setSlaveId(offer.getSlaveId())
                             .setExecutor(ExecutorInfo.newBuilder()
-                                .setExecutorId(ExecutorID.newBuilder().setValue(details.getId()))
-                                .setData(ByteString.copyFromUtf8(executorDataStr))
-                                .setCommand(CommandInfo.newBuilder()
-                                    .addUris(URI.newBuilder().setValue((String) _conf.get(CONF_EXECUTOR_URI)))
-                                    .setValue("cd storm-mesos* && python bin/storm-mesos supervisor")
-                            ))
+                                    .setExecutorId(ExecutorID.newBuilder().setValue(details.getId()))
+                                    .setData(ByteString.copyFromUtf8(executorDataStr))
+                                    .setCommand(CommandInfo.newBuilder()
+                                            .addUris(URI.newBuilder().setValue((String) _conf.get(CONF_EXECUTOR_URI)))
+                                            .setValue("cd storm-mesos* && python bin/storm-mesos supervisor " + getStormCmdOptions())
+                                    ))
                             .addResources(Resource.newBuilder()
-                                .setName("cpus")
-                                .setType(Type.SCALAR)
-                                .setScalar(Scalar.newBuilder().setValue(cpu)))
+                                    .setName("cpus")
+                                    .setType(Type.SCALAR)
+                                    .setScalar(Scalar.newBuilder().setValue(cpu)))
                             .addResources(Resource.newBuilder()
-                                .setName("mem")
-                                .setType(Type.SCALAR)
-                                .setScalar(Scalar.newBuilder().setValue(mem)))
+                                    .setName("mem")
+                                    .setType(Type.SCALAR)
+                                    .setScalar(Scalar.newBuilder().setValue(mem)))
                             .addResources(Resource.newBuilder()
-                                .setName("ports")
-                                .setType(Type.RANGES)
-                                .setRanges(Ranges.newBuilder()
-                                    .addRange(Range.newBuilder()
-                                        .setBegin(slot.getPort())
-                                        .setEnd(slot.getPort()))))
+                                    .setName("ports")
+                                    .setType(Type.RANGES)
+                                    .setRanges(Ranges.newBuilder()
+                                            .addRange(Range.newBuilder()
+                                                    .setBegin(slot.getPort())
+                                                    .setEnd(slot.getPort()))))
                             .build();
                         toLaunch.get(id).add(task);
                     }
