@@ -1,0 +1,30 @@
+#!/bin/bash
+set -o errexit -o nounset -o pipefail
+function -h {
+cat <<USAGE
+ USAGE: dcc-nimbus ...
+
+  Launch Nimbus on Marathon.
+
+USAGE
+}; function --help { -h ;}
+export LC_ALL=en_US.UTF-8
+
+function main {
+  trap "kill -TERM -$$" CHLD EXIT
+  setsid "$0" go "$@"
+}
+
+function go {
+  ./bin/storm-mesos nimbus "$@" &
+  ./bin/storm ui "$@"
+}
+
+function msg { out "$*" >&2 ;}
+function err { local x=$? ; msg "$*" ; return $(( $x == 0 ? 1 : $x )) ;}
+function out { printf '%s\n' "$*" ;}
+
+if [[ ${1:-} ]] && declare -F | cut -d' ' -f3 | fgrep -qx -- "${1:-}"
+then "$@"
+else main "$@"
+fi
