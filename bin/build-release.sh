@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# get release version from projet.clj 
+# get release version from projet.clj
 RELEASE=`head -1 project.clj | awk '{print $3}' | sed -e 's/\"//' | sed -e 's/\"//'`
 
 # clean up previous distribution
@@ -28,6 +28,9 @@ cp target/storm-mesos-$RELEASE.jar _release/storm/lib/
 
 # Copy storm-mesos bin
 cp bin/storm-mesos _release/storm/bin/
+
+# Copy dcc-nimbus bin
+cp bin/dcc-nimbus _release/storm/bin/
 
 # Copy the ZMQ native lib
 mkdir _release/storm/native
